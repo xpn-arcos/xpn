@@ -19,19 +19,16 @@
  *
  */
 
-
 #ifndef _EXPAND_H
 #define _EXPAND_H
 
-  /* ... Include / Inclusion ........................................... */
+/* ... Include / Inclusion ........................................... */
 
-     #include "config.h"
-     #include "base/base_lib.h"
-     #include "nfi/nfi_lib.h"
-     #include "xpn/xpn_lib.h"
+#include "base/base_lib.h"
+#include "config.h"
+#include "nfi/nfi_lib.h"
+#include "xpn/xpn_lib.h"
 
-
-  /* ................................................................... */
+/* ................................................................... */
 
 #endif
-

@@ -19,30 +19,26 @@
  *
  */
 
-
 #ifndef _XPN_POLICY_CWD_H
 #define _XPN_POLICY_CWD_H
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include "all_system.h"
+#include "xpn_cwd.h"
 
-     #include "all_system.h"
-     #include "xpn_cwd.h"
+/* ... Functions / Funciones ......................................... */
 
+int XpnGetAbsolutePath(const char* path, char* path_part);
 
-  /* ... Functions / Funciones ......................................... */
+/* ................................................................... */
 
-     int XpnGetAbsolutePath(const char *path, char *path_part);
-
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -19,47 +19,41 @@
  *
  */
 
-
 #ifndef _XPN_INIT_H
 #define _XPN_INIT_H
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include "all_system.h"
+#include "base/path_misc.h"
+#include "xpn_cwd.h"
+#include "xpn_file.h"
+#include "xpn_policy_init.h"
 
-     #include "all_system.h"
-     #include "base/path_misc.h"
-     #include "xpn_policy_init.h"
-     #include "xpn_cwd.h"
-     #include "xpn_file.h"
+/* ... Const / Const ................................................. */
 
+#define XPN_MAX_PART 128
 
-  /* ... Const / Const ................................................. */
- 
-     #define XPN_MAX_PART 128
+/* ... Data structures / Estructuras de datos ........................ */
 
+extern struct xpn_partition xpn_parttable[XPN_MAX_PART];
 
-  /* ... Data structures / Estructuras de datos ........................ */
+/* ... Functions / Funciones ......................................... */
 
-     extern struct xpn_partition xpn_parttable[XPN_MAX_PART];
+int xpn_init_partition(void);
 
+int xpn_simple_mark_error_server(int index);
+int xpn_simple_destroy(void);
+int xpn_simple_init(void);
 
-  /* ... Functions / Funciones ......................................... */
+/* ................................................................... */
 
-     int xpn_init_partition( void );
-
-     int xpn_simple_mark_error_server ( int index ) ;
-     int xpn_simple_destroy ( void );
-     int xpn_simple_init ( void );
-
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -19,42 +19,37 @@
  *
  */
 
-
 #ifndef _XPN_API_MUTEX_H
 #define _XPN_API_MUTEX_H
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include "all_system.h"
 
-     #include "all_system.h"
+/* ... Macros / Macros ............................................... */
 
+#ifdef _REENTRANT
 
-  /* ... Macros / Macros ............................................... */
+extern pthread_mutex_t xpn_api_mutex;
 
-  #ifdef _REENTRANT
+#define XPN_API_LOCK()   pthread_mutex_lock(&xpn_api_mutex)
+#define XPN_API_UNLOCK() pthread_mutex_unlock(&xpn_api_mutex)
 
-    extern pthread_mutex_t xpn_api_mutex ;
+#else
 
-    #define XPN_API_LOCK()    pthread_mutex_lock(&xpn_api_mutex)
-    #define XPN_API_UNLOCK()  pthread_mutex_unlock(&xpn_api_mutex)
-
-  #else
-
-    #define XPN_API_LOCK()    (0)
-    #define XPN_API_UNLOCK()  (0)
-
-  #endif
-
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
+#define XPN_API_LOCK()   (0)
+#define XPN_API_UNLOCK() (0)
 
 #endif
 
+/* ................................................................... */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

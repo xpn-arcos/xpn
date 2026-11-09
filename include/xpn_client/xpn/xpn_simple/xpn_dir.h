@@ -19,32 +19,28 @@
  *
  */
 
-
 #ifndef _XPN_DIR_H
 #define _XPN_DIR_H
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include "xpn.h"
+#include "xpn_policy_init.h"
+#include "xpn_policy_open.h"
 
-     #include "xpn.h"
-     #include "xpn_policy_init.h"
-     #include "xpn_policy_open.h"
+/* ... Functions / Funciones ......................................... */
 
+int xpn_simple_mkdir(const char* path, mode_t perm);
+int xpn_simple_rmdir(const char* path);
 
-  /* ... Functions / Funciones ......................................... */
- 
-     int xpn_simple_mkdir(const char *path, mode_t perm) ;
-     int xpn_simple_rmdir(const char *path) ;
+/* ................................................................... */
 
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
+#ifdef __cplusplus
+}
+#endif
 
 #endif

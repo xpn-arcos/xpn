@@ -19,40 +19,34 @@
  *
  */
 
-
 #ifndef _SOCKET_IP4_H_
 #define _SOCKET_IP4_H_
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-
-
-  /* ... Include / Inclusion ........................................... */
-
-     #include "all_system.h"
-     #include "debug_msg.h"
-     #include "utils.h"
-
-
-  /* ... Functions / Funciones ......................................... */
-
-     int socket_ip4_server_create  ( int *out_socket, int port );
-     int socket_ip4_server_accept  ( int socket, int * out_conection_socket ) ;
-     int socket_ip4_client_connect              ( char * srv_name, int   port,      int *out_socket ) ;
-     int socket_ip4_client_connect_with_retries ( char * srv_name, char *port_name, int *out_socket, int n_retries ) ;
-
-     int socket_ip4_gethostname   ( char * srv_name ) ;
-     int socket_ip4_gethostbyname ( char * ip, size_t ip_size, char * srv_name ) ;
-     int socket_ip4_getsockname   ( char * port_name, int new_socket ) ;
-
-
-  /* ................................................................... */
-
-
-  #ifdef  __cplusplus
-    }
-  #endif
-
+#ifdef __cplusplus
+extern "C" {
 #endif
 
+/* ... Include / Inclusion ........................................... */
+
+#include "all_system.h"
+#include "debug_msg.h"
+#include "utils.h"
+
+/* ... Functions / Funciones ......................................... */
+
+int socket_ip4_server_create(int* out_socket, int port);
+int socket_ip4_server_accept(int socket, int* out_conection_socket);
+int socket_ip4_client_connect(char* srv_name, int port, int* out_socket);
+int socket_ip4_client_connect_with_retries(char* srv_name, char* port_name, int* out_socket, int n_retries);
+
+int socket_ip4_gethostname(char* srv_name);
+int socket_ip4_gethostbyname(char* ip, size_t ip_size, char* srv_name);
+int socket_ip4_getsockname(char* port_name, int new_socket);
+
+/* ................................................................... */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

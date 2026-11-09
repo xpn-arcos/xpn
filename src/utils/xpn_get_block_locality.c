@@ -19,47 +19,47 @@
  *
  */
 
-#include <stdlib.h>
-#include "xpn.h"
 #include <errno.h>
+#include <stdlib.h>
 #include <string.h>
 
-int main(int argc, char *argv[])
+#include "xpn.h"
+
+int main(int argc, char* argv[])
 {
     int ret;
     int url_c;
-    char **url_v;
+    char** url_v;
     struct stat st;
-    if (argc < 2){
+    if (argc < 2) {
         printf("Usage: %s <file> <offset>\n", argv[0]);
         exit(EXIT_FAILURE);
     }
-    
+
     ret = xpn_init();
-    if (ret<0) {
+    if (ret < 0) {
         printf("Error %d while initializing expand\n", ret);
         exit(-1);
     }
-    
+
     ret = xpn_stat(argv[1], &st);
-    if (ret < 0){
+    if (ret < 0) {
         printf("Error in xpn_stat %s %s\n", argv[1], strerror(errno));
         goto error_main;
     }
 
-    ret = xpn_get_block_locality( argv[1], atol(argv[2]), &url_c, &url_v );
-    if (ret < 0){
+    ret = xpn_get_block_locality(argv[1], atol(argv[2]), &url_c, &url_v);
+    if (ret < 0) {
         printf("Error in xpn_get_block_locality %s %s\n", argv[1], strerror(errno));
         goto error_main;
     }
-    
+
     printf("Path: %s\nOffset: %ld\nServers urls:\n", argv[1], atol(argv[2]));
-    for (int i = 0; i < url_c; i++)
-    {
-        printf("    %s\n",url_v[i]);
+    for (int i = 0; i < url_c; i++) {
+        printf("    %s\n", url_v[i]);
     }
-    
-    xpn_free_block_locality( &url_c, &url_v );
+
+    xpn_free_block_locality(&url_c, &url_v);
 
     xpn_destroy();
 

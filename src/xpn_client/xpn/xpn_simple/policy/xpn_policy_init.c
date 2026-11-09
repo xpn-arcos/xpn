@@ -19,30 +19,26 @@
  *
  */
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include "xpn/xpn_simple/xpn_policy_init.h"
 
-     #include "xpn/xpn_simple/xpn_policy_init.h"
+/* ... Global variables / Variables globales ......................... */
 
+extern struct xpn_partition xpn_parttable[XPN_MAX_PART];
 
-  /* ... Global variables / Variables globales ......................... */
+/* ... Functions / Funciones ......................................... */
 
-     extern struct xpn_partition xpn_parttable[XPN_MAX_PART];
-
-
-  /* ... Functions / Funciones ......................................... */
-
-int XpnInitServer ( struct conf_file_data *conf_data, struct xpn_partition * part, struct nfi_server * serv, int server_num )
+int XpnInitServer(struct conf_file_data* conf_data, struct xpn_partition* part, struct nfi_server* serv, int server_num)
 {
     int ret;
     char prt[PROTOCOL_MAXLEN];
     char url_buf[KB];
 
     ret = XpnConfGetServer(conf_data, url_buf, part->id, server_num);
-    if (ret != 0)
-        return -1;
+    if (ret != 0) return -1;
 
-    serv -> block_size = part -> block_size; // Reference of the partition blocksize
+    serv->block_size = part->block_size;  // Reference of the partition blocksize
     XPN_DEBUG("url=%s", url_buf);
 
     ret = ParseURL(url_buf, prt, NULL, NULL, NULL, NULL, NULL);
@@ -53,14 +49,14 @@ int XpnInitServer ( struct conf_file_data *conf_data, struct xpn_partition * par
 
     // crear conexion
     if (strcmp(prt, "file") == 0) {
-        //printf("[XPN]nfi_local_init: %s\n",url);
+        // printf("[XPN]nfi_local_init: %s\n",url);
         ret = nfi_local_init(url_buf, serv, NULL);
         if (ret < 0) {
             errno = ESRCH;
             return -1;
         }
     }
-    #ifdef ENABLE_MPI_SERVER
+#ifdef ENABLE_MPI_SERVER
     else if (strcmp(prt, "mpi_server") == 0) {
         ret = nfi_xpn_server_init(url_buf, serv, XPN_SERVER_TYPE_MPI);
         if (ret < 0) {
@@ -68,39 +64,39 @@ int XpnInitServer ( struct conf_file_data *conf_data, struct xpn_partition * par
             return -1;
         }
     }
-    #endif
+#endif
 
-    #ifdef ENABLE_SCK_SERVER
-    else if ( (strcmp(prt, "sck_server") == 0) || (strcmp(prt, "mq_server") == 0) ) {
+#ifdef ENABLE_SCK_SERVER
+    else if ((strcmp(prt, "sck_server") == 0) || (strcmp(prt, "mq_server") == 0)) {
         ret = nfi_xpn_server_init(url_buf, serv, XPN_SERVER_TYPE_SCK);
         if (ret < 0) {
             errno = ESRCH;
             return -1;
         }
     }
-    #endif
+#endif
 
-    #ifdef ENABLE_NFS
+#ifdef ENABLE_NFS
     else if ((strcmp(prt, "nfs") == 0) || (strcmp(prt, "nfs2") == 0)) {
-        //printf("[XPN]nfi_nfs_init: %s\n",url);
+        // printf("[XPN]nfi_nfs_init: %s\n",url);
         ret = nfi_nfs_init(url_buf, serv, NULL);
         if (ret < 0) {
             errno = ESRCH;
             return -1;
         }
     }
-    #endif
+#endif
 
-    #ifdef ENABLE_NFS3
+#ifdef ENABLE_NFS3
     else if (strcmp(prt, "nfs3") == 0) {
-        //printf("[XPN]nfi_nfs3_init: %s\n",url);
+        // printf("[XPN]nfi_nfs3_init: %s\n",url);
         ret = nfi_nfs3_init(url_buf, serv, NULL);
         if (ret < 0) {
             errno = ESRCH;
             return -1;
         }
     }
-    #endif
+#endif
 
     else {
         printf("[XPN] Protocol '%s' not recognized\n", prt);
@@ -113,7 +109,7 @@ int XpnInitServer ( struct conf_file_data *conf_data, struct xpn_partition * par
 }
 
 /* return partition's id */
-int XpnGetPartition(char * path)
+int XpnGetPartition(char* path)
 {
     int i;
     char part[PATH_MAX];
@@ -133,7 +129,7 @@ int XpnGetPartition(char * path)
     return xpn_parttable[i].id;
 }
 
-struct xpn_partition * XpnSearchPart(int pd)
+struct xpn_partition* XpnSearchPart(int pd)
 {
     int i = 0;
 
@@ -145,20 +141,17 @@ struct xpn_partition * XpnSearchPart(int pd)
         return NULL;
     }
 
-    return & (xpn_parttable[i]);
+    return &(xpn_parttable[i]);
 }
 
-void XpnShowPartitionTable ( void )
+void XpnShowPartitionTable(void)
 {
     int i = 0;
 
-    while ((i < XPN_MAX_PART) && (strcmp("", xpn_parttable[i].name) != 0))
-    {
+    while ((i < XPN_MAX_PART) && (strcmp("", xpn_parttable[i].name) != 0)) {
         printf("[XPN]xpn_parttable[%d].name = %s\n", i, xpn_parttable[i].name);
         i++;
     }
 }
 
-
-  /* ...................................................................... */
-
+/* ...................................................................... */

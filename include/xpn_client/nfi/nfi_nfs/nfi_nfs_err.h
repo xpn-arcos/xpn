@@ -19,54 +19,47 @@
  *
  */
 
-
 #ifndef _NFI_NFS_ERR_H_
 #define _NFI_NFS_ERR_H_
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-  
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-  /* ... Include / Inclusion ........................................... */
+/* ... Include / Inclusion ........................................... */
 
-  #include "nfs.h"
+#include "nfs.h"
 
+/* ... Const / Const ................................................. */
 
-  /* ... Const / Const ................................................. */
-
-  enum nfi_nfs_err
-  {
-    NFSERR_PARAM         = 0,
-    NFSERR_MEMORY        = 1,
-    NFSERR_URL           = 2,
+enum nfi_nfs_err {
+    NFSERR_PARAM = 0,
+    NFSERR_MEMORY = 1,
+    NFSERR_URL = 2,
     NFSERR_MNTCONNECTION = 3,
-    NFSERR_MOUNT         = 4,
-    NFSERR_NFSCONNECTION = 5,   
-    NFSERR_GETATTR       = 6,
-    NFSERR_LOOKUP        = 7,
-    NFSERR_READ          = 8,
-    NFSERR_WRITE         = 9,
-    NFSERR_CREATE        = 10,
-    NFSERR_REMOVE        = 11,
-    NFSERR_MKDIR         = 12,
-    NFSERR_READDIR       = 13,
-    NFSERR_STATFS        = 14,
-  };
+    NFSERR_MOUNT = 4,
+    NFSERR_NFSCONNECTION = 5,
+    NFSERR_GETATTR = 6,
+    NFSERR_LOOKUP = 7,
+    NFSERR_READ = 8,
+    NFSERR_WRITE = 9,
+    NFSERR_CREATE = 10,
+    NFSERR_REMOVE = 11,
+    NFSERR_MKDIR = 12,
+    NFSERR_READDIR = 13,
+    NFSERR_STATFS = 14,
+};
 
+/* ... Data structures / Estructuras de datos ........................ */
 
-  /* ... Data structures / Estructuras de datos ........................ */
+/* ... Functions / Funciones ......................................... */
 
+void nfs_err(int err);
 
-  /* ... Functions / Funciones ......................................... */
+/* ................................................................... */
 
-  void nfs_err(int err);
-
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
+#ifdef __cplusplus
+}
+#endif
 
 #endif

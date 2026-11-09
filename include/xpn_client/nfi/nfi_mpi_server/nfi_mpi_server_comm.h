@@ -19,41 +19,38 @@
  *
  */
 
-
 #ifndef _NFI_MPI_SERVER_COMM_H_
 #define _NFI_MPI_SERVER_COMM_H_
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-
-  /* ... Include / Inclusion ........................................... */
-
-  #include "all_system.h"
-  #include "base/utils.h"
-  #include "base/ns.h"
-  #include "base/socket.h"
-  #include "base/service_socket.h"
-  #include "xpn_server/xpn_server_ops.h"
-
-
-  /* ... Functions / Funciones ......................................... */
-
-  int     nfi_mpi_server_comm_init            ( int xpn_thread );
-  int     nfi_mpi_server_comm_destroy         ( );
-
-  int     nfi_mpi_server_comm_connect         ( char *srv_name, char *port_name, MPI_Comm *out_comm);
-  int     nfi_mpi_server_comm_disconnect      ( MPI_Comm *fd );
-
-  ssize_t nfi_mpi_server_comm_write_operation ( MPI_Comm fd, int op );
-  ssize_t nfi_mpi_server_comm_write_data      ( MPI_Comm fd, char *data, ssize_t size );
-  ssize_t nfi_mpi_server_comm_read_data       ( MPI_Comm fd, char *data, ssize_t size );
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
-
+#ifdef __cplusplus
+extern "C" {
 #endif
 
+/* ... Include / Inclusion ........................................... */
+
+#include "all_system.h"
+#include "base/ns.h"
+#include "base/service_socket.h"
+#include "base/socket.h"
+#include "base/utils.h"
+#include "xpn_server/xpn_server_ops.h"
+
+/* ... Functions / Funciones ......................................... */
+
+int nfi_mpi_server_comm_init(int xpn_thread);
+int nfi_mpi_server_comm_destroy();
+
+int nfi_mpi_server_comm_connect(char* srv_name, char* port_name, MPI_Comm* out_comm);
+int nfi_mpi_server_comm_disconnect(MPI_Comm* fd);
+
+ssize_t nfi_mpi_server_comm_write_operation(MPI_Comm fd, int op);
+ssize_t nfi_mpi_server_comm_write_data(MPI_Comm fd, char* data, ssize_t size);
+ssize_t nfi_mpi_server_comm_read_data(MPI_Comm fd, char* data, ssize_t size);
+
+/* ................................................................... */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

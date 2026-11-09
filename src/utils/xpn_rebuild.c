@@ -19,59 +19,56 @@
  *
  */
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include <dirent.h>
+#include <fcntl.h>
+#include <linux/limits.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
-     #include <dirent.h>
-     #include <fcntl.h>
-     #include <linux/limits.h>
-     #include <stdio.h>
-     #include <stdlib.h>
-     #include <string.h>
-     #include <sys/stat.h>
-     #include <sys/types.h>
-     #include <unistd.h>
+#if defined(HAVE_MPI_H)
+#include "mpi.h"
+#endif
 
-     #if defined (HAVE_MPI_H)
-     #include "mpi.h"
-     #endif
+#include "ns.h"
+#include "xpn/xpn_simple/xpn_policy_rw.h"
 
-     #include "ns.h"
-     #include "xpn/xpn_simple/xpn_policy_rw.h"
+/* ... Const / Const ................................................. */
 
+#ifndef _LARGEFILE_SOURCE
+#define _LARGEFILE_SOURCE
+#endif
 
-  /* ... Const / Const ................................................. */
+#ifndef _FILE_OFFSET_BITS
+#define _FILE_OFFSET_BITS 64
+#endif
 
-     #ifndef _LARGEFILE_SOURCE
-     #define _LARGEFILE_SOURCE
-     #endif
+#define HEADER_SIZE 8192
 
-     #ifndef _FILE_OFFSET_BITS
-     #define _FILE_OFFSET_BITS 64
-     #endif
+/* ... Global variables / Variables globales ......................... */
 
-     #define HEADER_SIZE 8192
+int* rank_actual_to_new = NULL;
+int* rank_actual_to_old = NULL;
+int* rank_new_to_actual = NULL;
+int* rank_old_to_actual = NULL;
+int old_size, new_size;
+struct mpi_msg_info
+{
+    int rank_send;
+    int rank_recv;
+    ssize_t read_size;
+    off64_t offset;
+};
 
+/* ... Functions / Funciones ......................................... */
 
-  /* ... Global variables / Variables globales ......................... */
-
-     int *rank_actual_to_new = NULL;
-     int *rank_actual_to_old = NULL;
-     int *rank_new_to_actual = NULL;
-     int *rank_old_to_actual = NULL;
-     int old_size, new_size;
-     struct mpi_msg_info {
-         int rank_send;
-         int rank_recv;
-         ssize_t read_size;
-         off64_t offset;
-     };
-
-
-  /* ... Functions / Funciones ......................................... */
-
-#if defined (HAVE_MPI_H)
-int copy(char *entry, int is_file, int blocksize, int replication_level, int rank, int size)
+#if defined(HAVE_MPI_H)
+int copy(char* entry, int is_file, int blocksize, int replication_level, int rank, int size)
 {
     struct stat st;
     int res;
@@ -83,7 +80,7 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
     off_t offset_src, offset_dest, offset_real;
     int replication, rank_to_send;
     char *buf = NULL, *buf_recv = NULL;
-    struct mpi_msg_info *all_msg_info = NULL;
+    struct mpi_msg_info* all_msg_info = NULL;
     struct mpi_msg_info local_msg_info;
     int buf_len;
 
@@ -110,8 +107,7 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
     }
 
-    if (!is_file)
-    {
+    if (!is_file) {
         if (rank_actual_to_new[rank] != -1) {
             // Not error when mkdir because it can exist
             res = mkdir(entry, st.st_mode);
@@ -121,8 +117,7 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
             }
         }
     }
-    else
-    {
+    else {
         // Only create tmp file in new_ranks
         if (rank_actual_to_new[rank] != -1) {
             sprintf(dest_path, "%s_XXXXXX", entry);
@@ -149,12 +144,12 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
         }
         // Alocate buffers
         buf_len = blocksize;
-        buf = (char *)malloc(blocksize);
+        buf = (char*)malloc(blocksize);
         if (NULL == buf) {
             perror("malloc");
             MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
         }
-        buf_recv = (char *)malloc(blocksize);
+        buf_recv = (char*)malloc(blocksize);
         if (NULL == buf_recv) {
             perror("malloc");
             MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
@@ -180,11 +175,9 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
         offset_src = 0;
         read_size = 0;
         int finish = 0;
-        do
-	{
+        do {
             // Read in old_ranks
-            if (rank_actual_to_old[rank] != -1)
-	    {
+            if (rank_actual_to_old[rank] != -1) {
                 // Calculate the block
                 XpnCalculateBlockInvert(blocksize, replication_level, old_size, rank_actual_to_old[rank], offset_src, 0,
                                         &offset_real, &replication);
@@ -202,8 +195,7 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
                 local_msg_info.read_size = read_size;
                 local_msg_info.offset = offset_dest;
             }
-	    else
-	    {
+            else {
                 // Construct mpi_msg_info when rank is not in the old ranks
                 local_msg_info.rank_send = -1;
                 local_msg_info.rank_recv = -1;
@@ -211,21 +203,20 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
                 local_msg_info.offset = -1;
             }
             // Send the structure of mpi_msg_info to all processes
-            res = MPI_Allgather(&local_msg_info, sizeof(struct mpi_msg_info), MPI_BYTE, all_msg_info, sizeof(struct mpi_msg_info), MPI_BYTE, MPI_COMM_WORLD);
+            res = MPI_Allgather(&local_msg_info, sizeof(struct mpi_msg_info), MPI_BYTE, all_msg_info,
+                                sizeof(struct mpi_msg_info), MPI_BYTE, MPI_COMM_WORLD);
             if (res != MPI_SUCCESS) {
                 fprintf(stderr, "Error: %s\n", strerror(errno));
                 MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
             }
 
             // For all messages
-            for (int i = 0; i < size; i++)
-	    {
+            for (int i = 0; i < size; i++) {
                 // Send if the rank has to send and not is the same as recv
-                if (all_msg_info[i].rank_send == rank)
-		{
-                    if (all_msg_info[i].rank_send != all_msg_info[i].rank_recv)
-		    {
-                        res = MPI_Send(buf, all_msg_info[i].read_size, MPI_CHAR, all_msg_info[i].rank_recv, 0, MPI_COMM_WORLD);
+                if (all_msg_info[i].rank_send == rank) {
+                    if (all_msg_info[i].rank_send != all_msg_info[i].rank_recv) {
+                        res = MPI_Send(buf, all_msg_info[i].read_size, MPI_CHAR, all_msg_info[i].rank_recv, 0,
+                                       MPI_COMM_WORLD);
                         if (res != MPI_SUCCESS) {
                             fprintf(stderr, "Error: %s\n", strerror(errno));
                             MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
@@ -234,12 +225,10 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
                 }
                 // Recv if rank has to recv and not is the same as send
                 // then write the recv buf
-                if (all_msg_info[i].rank_recv == rank)
-		{
-                    if (all_msg_info[i].rank_send != all_msg_info[i].rank_recv)
-		    {
-                        res = MPI_Recv(buf_recv, all_msg_info[i].read_size, MPI_CHAR, all_msg_info[i].rank_send, 0, MPI_COMM_WORLD,
-                                       MPI_STATUS_IGNORE);
+                if (all_msg_info[i].rank_recv == rank) {
+                    if (all_msg_info[i].rank_send != all_msg_info[i].rank_recv) {
+                        res = MPI_Recv(buf_recv, all_msg_info[i].read_size, MPI_CHAR, all_msg_info[i].rank_send, 0,
+                                       MPI_COMM_WORLD, MPI_STATUS_IGNORE);
                         if (res != MPI_SUCCESS) {
                             fprintf(stderr, "Error: %s\n", strerror(errno));
                             MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
@@ -254,7 +243,8 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
                     // Use diferent buf if recv or if the same rank use directly
                     if (all_msg_info[i].rank_send != all_msg_info[i].rank_recv) {
                         write_size = filesystem_write(fd_dest, buf_recv, all_msg_info[i].read_size);
-                    } else {
+                    }
+                    else {
                         write_size = filesystem_write(fd_dest, buf, all_msg_info[i].read_size);
                     }
 
@@ -301,27 +291,25 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
     return 0;
 }
 
-int list(char *dir_name, int blocksize, int replication_level, int rank, int size)
+int list(char* dir_name, int blocksize, int replication_level, int rank, int size)
 {
     int res;
-    DIR *dir = NULL;
+    DIR* dir = NULL;
     struct stat stat_buf;
-    struct dirent *entry;
+    struct dirent* entry;
     char path[PATH_MAX];
     int while_loop = 1;
 
     // Calculate the master rank of the old file
     int master_old = 0;
-    for (int i = 0; i < size; i++)
-    {
+    for (int i = 0; i < size; i++) {
         if (rank_actual_to_old[i] == 0) {
             master_old = i;
         }
     }
     // Only on master open and readdir (because there are no dir structure in some of new ranks)
     // then send to the others ranks
-    if (rank == master_old)
-    {
+    if (rank == master_old) {
         dir = opendir(dir_name);
         if (dir == NULL) {
             perror("opendir:");
@@ -387,8 +375,7 @@ int list(char *dir_name, int blocksize, int replication_level, int rank, int siz
         }
         closedir(dir);
     }
-    else
-    {
+    else {
         while_loop = 1;
         while (1) {
             // Get the broadcast values to run copy()
@@ -423,7 +410,7 @@ int list(char *dir_name, int blocksize, int replication_level, int rank, int siz
     return 0;
 }
 
-void calculate_ranks_sizes(char *path_old_hosts, char *path_new_hosts, int *old_rank, int *new_rank)
+void calculate_ranks_sizes(char* path_old_hosts, char* path_new_hosts, int* old_rank, int* new_rank)
 {
     // Get ip and hostname
     char hostip[HOST_NAME_MAX];
@@ -431,8 +418,8 @@ void calculate_ranks_sizes(char *path_old_hosts, char *path_new_hosts, int *old_
     char hostname[HOST_NAME_MAX];
     ns_get_hostname(hostname);
     // Open host files
-    FILE *file_old = NULL;
-    FILE *file_new = NULL;
+    FILE* file_old = NULL;
+    FILE* file_new = NULL;
     file_old = fopen(path_old_hosts, "r");
     if (file_old == NULL) {
         perror("Error opening old_hosts");
@@ -475,10 +462,9 @@ cleanup_calculate_ranks_sizes:
 }
 #endif
 
-
-#if defined (HAVE_MPI_H)
+#if defined(HAVE_MPI_H)
 // TODO: think if MPI_Abort is the desired error handler
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     int rank, size, old_rank, new_rank;
     int replication_level = 0;
@@ -578,13 +564,11 @@ int main(int argc, char *argv[])
     return res;
 }
 #else
-  int main ( int argc, char *argv[] )
-  {
-      printf("ERROR: this utility must to be compiled with MPI support\n") ;
-      return -1 ;
-  }
+int main(int argc, char* argv[])
+{
+    printf("ERROR: this utility must to be compiled with MPI support\n");
+    return -1;
+}
 #endif
 
-
 /* ................................................................... */
-

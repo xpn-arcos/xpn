@@ -19,38 +19,34 @@
  *
  */
 
-
 #ifndef _SCK_SERVER_COMM_H_
 #define _SCK_SERVER_COMM_H_
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-
-  /* ... Include / Inclusion ........................................... */
-
-     #include "all_system.h"
-     #include "base/utils.h"
-     #include "base/time_misc.h"
-     #include "xpn_server/xpn_server_params.h"
-
-  
-  /* ... Functions / Funciones ......................................... */
-
-     int  sck_server_comm_init         ( int *socket, char *port_name, int ipv );
-     int  sck_ip4_server_comm_init     ( int *socket, char *port_name );
-     int  sck_ip6_server_comm_init     ( int *socket, char *port_name );
-     int  sck_server_comm_accept       ( int socket, int **new_socket, int ipv );
-     int  sck_ip4_server_comm_accept   ( int socket, int **new_socket );
-     int  sck_ip6_server_comm_accept   ( int socket, int **new_socket );
-     int  sck_server_comm_disconnect   ( int *socket );
-
-
-  /* ................................................................... */
-  
-  #ifdef  __cplusplus
-    }
-  #endif
-
+#ifdef __cplusplus
+extern "C" {
 #endif
 
+/* ... Include / Inclusion ........................................... */
+
+#include "all_system.h"
+#include "base/time_misc.h"
+#include "base/utils.h"
+#include "xpn_server/xpn_server_params.h"
+
+/* ... Functions / Funciones ......................................... */
+
+int sck_server_comm_init(int* socket, char* port_name, int ipv);
+int sck_ip4_server_comm_init(int* socket, char* port_name);
+int sck_ip6_server_comm_init(int* socket, char* port_name);
+int sck_server_comm_accept(int socket, int** new_socket, int ipv);
+int sck_ip4_server_comm_accept(int socket, int** new_socket);
+int sck_ip6_server_comm_accept(int socket, int** new_socket);
+int sck_server_comm_disconnect(int* socket);
+
+/* ................................................................... */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

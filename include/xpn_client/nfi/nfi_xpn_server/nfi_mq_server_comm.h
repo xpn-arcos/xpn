@@ -19,34 +19,31 @@
  *
  */
 
-
 #ifndef _NFI_MQ_SERVER_COMM_H_
 #define _NFI_MQ_SERVER_COMM_H_
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-
-  /* ... Include / Inclusion ........................................... */
-
-  #include "all_system.h"
-  #include "utils.h"
-  #include "nfi_xpn_server.h"
-  #include "xpn_server_params.h"
-
-
-  /* ... Functions / Funciones ......................................... */
-
-  void    nfi_mq_server_init      ( struct nfi_xpn_server *server_aux );
-  void    nfi_mq_server_destroy   ( struct nfi_xpn_server *server_aux );
-  ssize_t nfi_mq_server_publish   ( struct nfi_xpn_server *server_aux, struct nfi_xpn_server_fhandle *fh_aux, void * buffer, off_t offset, size_t size );
-
-      
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
-
+#ifdef __cplusplus
+extern "C" {
 #endif
 
+/* ... Include / Inclusion ........................................... */
+
+#include "all_system.h"
+#include "nfi_xpn_server.h"
+#include "utils.h"
+#include "xpn_server_params.h"
+
+/* ... Functions / Funciones ......................................... */
+
+void nfi_mq_server_init(struct nfi_xpn_server* server_aux);
+void nfi_mq_server_destroy(struct nfi_xpn_server* server_aux);
+ssize_t nfi_mq_server_publish(struct nfi_xpn_server* server_aux, struct nfi_xpn_server_fhandle* fh_aux, void* buffer,
+                              off_t offset, size_t size);
+
+/* ................................................................... */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

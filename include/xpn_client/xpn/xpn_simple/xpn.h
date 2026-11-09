@@ -22,47 +22,43 @@
 #ifndef _XPN_H
 #define _XPN_H
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include "nfi/nfi.h"
+#include "nfi/nfi_lib.h"
+#include "nfi/nfi_ops.h"
+#include "nfi/nfi_worker.h"
 
-  #include "nfi/nfi.h"
-  #include "nfi/nfi_worker.h"
-  #include "nfi/nfi_ops.h"
-  #include "nfi/nfi_lib.h"
+/* ... Const / Const ................................................. */
 
+#define XPN_CONF "XPN_CONF"
 
-  /* ... Const / Const ................................................. */
+/* ... Data structures / Estructuras de datos ........................ */
 
-  #define XPN_CONF "XPN_CONF"
+// Paralel struct partition
+struct xpn_partition
+{
+    int id;                        // id of partition
+    int replication_level;         // replication_level of files :0, 1, 2,...
+    char name[PATH_MAX];           // name of partition
+    ssize_t block_size;            // size of distribution used
 
+    int data_nserv;                // number of server
+    struct nfi_server* data_serv;  // list of data servers in the partition
 
-  /* ... Data structures / Estructuras de datos ........................ */
+    int local_serv;                // server with locality
+};
 
-  // Paralel struct partition
-  struct xpn_partition
-  {
-    int id;       // id of partition 
-    int replication_level;     // replication_level of files :0, 1, 2,... 
-    char name[PATH_MAX];  // name of partition 
-    ssize_t block_size;   // size of distribution used 
+/* ... Functions / Funciones ......................................... */
 
-    int data_nserv;     // number of server 
-    struct nfi_server *data_serv; // list of data servers in the partition 
+/* ................................................................... */
 
-    int local_serv; // server with locality
-  };
-
-  /* ... Functions / Funciones ......................................... */
-
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
+#ifdef __cplusplus
+}
+#endif
 
 #endif

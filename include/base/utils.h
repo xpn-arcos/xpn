@@ -19,48 +19,49 @@
  *
  */
 
-
 #ifndef _UTILS_H
 #define _UTILS_H
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-
-
-  /* ... Include / Inclusion ........................................... */
-
-     #include <stdio.h>
-     #include <stdarg.h>
-     #include <sys/time.h>
-     #include "base/debug_msg.h"
-
-
-  /* ... Const / Const ................................................. */
-
-     // Check arguments
-     #define FREE_AND_NULL(ptr) \
-              if ((ptr) != NULL) { free((ptr)); (ptr) = NULL; }
-
-     #define NULL_RET_ERR(ptr, set_errno) \
-              if (NULL == (ptr)) { errno=set_errno; return -1; }
-
-
-  /* ... Functions / Funciones ......................................... */
-
-     // time
-     long utils_get_time ( void ) ;
-
-     // enviroment variables
-     int utils_getenv_int ( char *env_name, int default_value ) ;
-     int utils_str2int    ( char *str_name, int default_value ) ;
-
-
-  /* .................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
-
+#ifdef __cplusplus
+extern "C" {
 #endif
 
+/* ... Include / Inclusion ........................................... */
+
+#include <stdarg.h>
+#include <stdio.h>
+#include <sys/time.h>
+
+#include "base/debug_msg.h"
+
+/* ... Const / Const ................................................. */
+
+// Check arguments
+#define FREE_AND_NULL(ptr) \
+    if ((ptr) != NULL) {   \
+        free((ptr));       \
+        (ptr) = NULL;      \
+    }
+
+#define NULL_RET_ERR(ptr, set_errno) \
+    if (NULL == (ptr)) {             \
+        errno = set_errno;           \
+        return -1;                   \
+    }
+
+/* ... Functions / Funciones ......................................... */
+
+// time
+long utils_get_time(void);
+
+// enviroment variables
+int utils_getenv_int(char* env_name, int default_value);
+int utils_str2int(char* str_name, int default_value);
+
+/* .................................................................... */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

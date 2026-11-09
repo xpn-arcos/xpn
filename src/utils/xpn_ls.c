@@ -19,111 +19,103 @@
  *
  */
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include <dirent.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
-     #include <stdio.h>
-     #include <unistd.h>
-     #include <sys/types.h>
-     #include <dirent.h>
-     #include <string.h>
-     #include <sys/stat.h>
-     #include "all_system.h"
+#include "all_system.h"
 #if defined(HAVE_MPI_H)
-     #include "mpi.h"
+#include "mpi.h"
 #endif
 
+/* ... Functions / Funciones ......................................... */
 
-  /* ... Functions / Funciones ......................................... */
-
-  int list (char * dir_name, FILE * fd)
-  {
+int list(char* dir_name, FILE* fd)
+{
     int ret;
     DIR* dir = NULL;
     struct stat stat_buf;
-    char path [PATH_MAX];
+    char path[PATH_MAX];
 
     dir = opendir(dir_name);
-    if(dir == NULL)
-    {
-      perror("opendir:");
-      return -1;
+    if (dir == NULL) {
+        perror("opendir:");
+        return -1;
     }
-    
+
     struct dirent* entry;
     entry = readdir(dir);
 
-    while(entry != NULL)
-    {
-      if (! strcmp(entry->d_name, ".")){
+    while (entry != NULL) {
+        if (!strcmp(entry->d_name, ".")) {
+            entry = readdir(dir);
+            continue;
+        }
+
+        if (!strcmp(entry->d_name, "..")) {
+            entry = readdir(dir);
+            continue;
+        }
+
+        sprintf(path, "%s/%s", dir_name, entry->d_name);
+        fprintf(fd, "%s\n", path);
+
+        ret = stat(path, &stat_buf);
+        if (ret < 0) {
+            perror("stat: ");
+            printf("%s\n", path);
+            entry = readdir(dir);
+            continue;
+        }
+
+        if (S_ISDIR(stat_buf.st_mode)) {
+            list(path, fd);
+        }
+
         entry = readdir(dir);
-        continue;
-      }
-
-      if (! strcmp(entry->d_name, "..")){
-        entry = readdir(dir);
-        continue;
-      }
-
-      sprintf(path, "%s/%s", dir_name, entry->d_name);
-      fprintf(fd, "%s\n", path);
-
-      ret = stat(path, &stat_buf);
-      if (ret < 0) {
-        perror("stat: ");
-        printf("%s\n", path);
-        entry = readdir(dir);
-        continue;
-      }
-
-      if (S_ISDIR(stat_buf.st_mode))
-      {
-        list(path, fd);
-      }
-
-      entry = readdir(dir);
     }
 
     closedir(dir);
-    
+
     return 0;
-  }
+}
 
 #if defined(HAVE_MPI_H)
-  int main(int argc, char *argv[])
-  {
-      FILE * fd;
+int main(int argc, char* argv[])
+{
+    FILE* fd;
 
-      if (argc < 3)
-      {
-          printf("ERROR: too few arguments.\n");
-          printf("Usage: %s <directory path> <output_file>\n", argv[0]);
-          return -1;
-      }
-      MPI_Init(&argc, &argv);
+    if (argc < 3) {
+        printf("ERROR: too few arguments.\n");
+        printf("Usage: %s <directory path> <output_file>\n", argv[0]);
+        return -1;
+    }
+    MPI_Init(&argc, &argv);
 
-      fd = fopen(argv[2], "w");
-      if (NULL == fd)
-      {
-          perror("fopen: ");
-          return -1;
-      }
+    fd = fopen(argv[2], "w");
+    if (NULL == fd) {
+        perror("fopen: ");
+        return -1;
+    }
 
-      list(argv[1], fd);
+    list(argv[1], fd);
 
-      MPI_Barrier(MPI_COMM_WORLD);
-      MPI_Finalize();
+    MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Finalize();
 
-      return 0;
-  }
+    return 0;
+}
 #else
-  int main(int argc, char *argv[])
-  {
-      printf("ERROR: this utility must be compiled with MPI support.\n");
-      return -1;
-  }
+int main(int argc, char* argv[])
+{
+    printf("ERROR: this utility must be compiled with MPI support.\n");
+    return -1;
+}
 #endif
 
-
 /* ................................................................... */
-

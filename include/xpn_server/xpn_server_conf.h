@@ -19,30 +19,27 @@
  *
  */
 
-
 #ifndef _XPN_SERVER_CONF_H_
 #define _XPN_SERVER_CONF_H_
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-  /* ... Include / Inclusion ........................................... */
+/* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "base/ns.h"
+#include "all_system.h"
+#include "base/ns.h"
 
+/* ... Const / Const ................................................. */
 
-  /* ... Const / Const ................................................. */
+#define XPN_SERVER_TYPE_MPI 0
+#define XPN_SERVER_TYPE_SCK 1
 
-     #define XPN_SERVER_TYPE_MPI 0
-     #define XPN_SERVER_TYPE_SCK 1
+/* ................................................................... */
 
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
+#ifdef __cplusplus
+}
+#endif
 
 #endif

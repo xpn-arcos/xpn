@@ -19,483 +19,478 @@
  *
  */
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include "xpn.h"
+#include "xpn_api_mutex.h"
+#include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
 
-     #include "xpn.h"
-     #include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
-     #include "xpn_api_mutex.h"
+/* ... Functions / Funciones ......................................... */
 
+int xpn_init(void)
+{
+    int ret = -1;
 
-  /* ... Functions / Funciones ......................................... */
+    debug_info("[XPN_UNISTD] [xpn_init] >> Begin\n");
 
-     int xpn_init ( void )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_init();
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_init] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_init] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_init();
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_init] >> End\n");
+int xpn_destroy(void)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_destroy] >> Begin\n");
 
-     int xpn_destroy ( void )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_destroy();
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_destroy] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_destroy] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_destroy();
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_destroy] >> End\n");
+int xpn_mark_error_server(int index)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_mark_error_server] >> End\n");
 
-     int xpn_mark_error_server ( int index )
-     {
-       int ret = -1;
+    ret = xpn_simple_mark_error_server(index);
 
-       debug_info("[XPN_UNISTD] [xpn_mark_error_server] >> End\n");
+    debug_info("[XPN_UNISTD] [xpn_mark_error_server] >> End\n");
 
-       ret = xpn_simple_mark_error_server(index);
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_mark_error_server] >> End\n");
+int xpn_get_block_locality(char* path, off_t offset, int* url_c, char** url_v[])
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_get_block_locality] >> End\n");
 
-     int xpn_get_block_locality ( char *path, off_t offset, int *url_c, char **url_v[] )
-     {
-       int ret = -1;
+    ret = xpn_simple_get_block_locality(path, offset, url_c, url_v);
 
-       debug_info("[XPN_UNISTD] [xpn_get_block_locality] >> End\n");
+    debug_info("[XPN_UNISTD] [xpn_get_block_locality] >> End\n");
 
-       ret = xpn_simple_get_block_locality(path, offset, url_c, url_v);
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_get_block_locality] >> End\n");
+int xpn_free_block_locality(int* url_c, char** url_v[])
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_free_block_locality] >> End\n");
 
-     int xpn_free_block_locality ( int *url_c, char **url_v[] )
-     {
-       int ret = -1;
+    ret = xpn_simple_free_block_locality(url_c, url_v);
 
-       debug_info("[XPN_UNISTD] [xpn_free_block_locality] >> End\n");
+    debug_info("[XPN_UNISTD] [xpn_free_block_locality] >> End\n");
 
-       ret = xpn_simple_free_block_locality(url_c, url_v);
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_free_block_locality] >> End\n");
+int xpn_creat(const char* path, mode_t perm)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_creat] >> Begin\n");
 
-     int xpn_creat ( const char *path, mode_t perm )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_creat(path, perm);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_creat] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_creat] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_creat(path, perm);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_creat] >> End\n");
+int xpn_open(const char* path, int flags, ...)
+{
+    va_list ap;
+    int ret = -1;
+    mode_t mode = 0;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_open] >> Begin\n");
 
-     int xpn_open ( const char *path, int flags, ... )
-     {
-       va_list ap;
-       int     ret  = -1;
-       mode_t  mode = 0;
+    // get mode
+    if ((flags & O_CREAT) > 0) {
+        va_start(ap, flags);
+        mode = va_arg(ap, mode_t);
+        va_end(ap);
+    }
 
-       debug_info("[XPN_UNISTD] [xpn_open] >> Begin\n");
+    // call simple_open
+    XPN_API_LOCK();
+    ret = xpn_simple_open(path, flags, mode);
+    XPN_API_UNLOCK();
 
-       // get mode
-       if ((flags & O_CREAT) > 0)
-       {
-           va_start(ap, flags);
-           mode = va_arg(ap, mode_t);
-           va_end(ap);
-       }
+    debug_info("[XPN_UNISTD] [xpn_open] >> End\n");
 
-       // call simple_open
-       XPN_API_LOCK();
-       ret = xpn_simple_open(path, flags, mode);
-       XPN_API_UNLOCK();
+    // return ret
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_open] >> End\n");
+int xpn_close(int fd)
+{
+    int ret = -1;
 
-       // return ret
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_close] >> Begin\n");
 
-     int xpn_close ( int fd )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_close(fd);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_close] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_close] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_close(fd);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_close] >> End\n");
+ssize_t xpn_read(int fd, void* buffer, size_t size)
+{
+    ssize_t ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_read] >> Begin\n");
 
-     ssize_t xpn_read  ( int fd, void *buffer, size_t size )
-     {
-       ssize_t ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_read(fd, buffer, size);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_read] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_read] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_read(fd, buffer, size);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_read] >> End\n");
+ssize_t xpn_write(int fd, const void* buffer, size_t size)
+{
+    ssize_t ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_write] >> Begin\n");
 
-     ssize_t xpn_write ( int fd, const void *buffer, size_t size )
-     {
-       ssize_t ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_write(fd, buffer, size);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_write] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_write] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_write(fd, buffer, size);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_write] >> End\n");
+off_t xpn_lseek(int fd, off_t offset, int flag)
+{
+    off_t ret = (off_t)-1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_lseek] >> Begin\n");
 
-     off_t   xpn_lseek ( int fd, off_t offset, int flag )
-     {
-       off_t ret = (off_t) -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_lseek(fd, offset, flag);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_lseek] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_lseek] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_lseek(fd, offset, flag);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_lseek] >> End\n");
+char* xpn_getcwd(char* path, size_t size)
+{
+    char* ret = NULL;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_getcwd] >> Begin\n");
 
-     char* xpn_getcwd ( char *path, size_t size )
-     {
-       char * ret = NULL;
+    XPN_API_LOCK();
+    ret = xpn_simple_getcwd(path, size);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_getcwd] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_getcwd] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_getcwd(path, size);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_getcwd] >> End\n");
+int xpn_chdir(char* path)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_chdir] >> Begin\n");
 
-     int xpn_chdir(char *path)
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_chdir(path);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_chdir] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_chdir] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_chdir(path);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_chdir] >> End\n");
+int xpn_mkdir(const char* path, mode_t perm)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_mkdir] >> Begin\n");
 
-     int xpn_mkdir ( const char *path, mode_t perm )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_mkdir(path, perm);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_mkdir] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_mkdir] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_mkdir(path, perm);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_mkdir] >> End\n");
+int xpn_rmdir(const char* path)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_rmdir] >> Begin\n");
 
-     int xpn_rmdir(const char *path)
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_rmdir(path);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_rmdir] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_rmdir] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_rmdir(path);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_rmdir] >> End\n");
+DIR* xpn_opendir(const char* path)
+{
+    DIR* ret = NULL;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_opendir] >> Begin\n");
 
-     DIR *xpn_opendir ( const char *path )
-     {
-       DIR *ret = NULL;
+    XPN_API_LOCK();
+    ret = xpn_simple_opendir(path);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_opendir] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_opendir] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_opendir(path);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_opendir] >> End\n");
+struct dirent* xpn_readdir(DIR* dirp)
+{
+    struct dirent* ret = NULL;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_readdir] >> Begin\n");
 
-     struct dirent* xpn_readdir ( DIR *dirp )
-     {
-       struct dirent* ret = NULL;
+    XPN_API_LOCK();
+    ret = xpn_simple_readdir(dirp);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_readdir] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_readdir] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_readdir(dirp);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_readdir] >> End\n");
+int xpn_closedir(DIR* dirp)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_closedir] >> Begin\n");
 
-     int xpn_closedir ( DIR *dirp )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_closedir(dirp);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_closedir] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_closedir] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_closedir(dirp);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_closedir] >> End\n");
+void xpn_rewinddir(DIR* dirp)
+{
+    debug_info("[XPN_UNISTD] [xpn_rewinddir] >> Begin\n");
 
-       return ret;
-     }
+    XPN_API_LOCK();
+    xpn_simple_rewinddir(dirp);
+    XPN_API_UNLOCK();
 
-     void xpn_rewinddir ( DIR *dirp )
-     {
-       debug_info("[XPN_UNISTD] [xpn_rewinddir] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_rewinddir] >> End\n");
+}
 
-       XPN_API_LOCK();
-       xpn_simple_rewinddir(dirp);
-       XPN_API_UNLOCK();
+int xpn_unlink(const char* path)
+{
+    int ret = -1;
 
-       debug_info("[XPN_UNISTD] [xpn_rewinddir] >> End\n");
-     }
+    debug_info("[XPN_UNISTD] [xpn_unlink] >> Begin\n");
 
-     int xpn_unlink ( const char *path )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_unlink(path);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_unlink] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_unlink] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_unlink(path);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_unlink] >> End\n");
+int xpn_rename(const char* path, const char* newpath)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_rename] >> Begin\n");
 
-     int xpn_rename ( const char *path, const char *newpath )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_rename(path, newpath);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_rename] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_rename] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_rename(path, newpath);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_rename] >> End\n");
+int xpn_truncate(const char* path, off_t length)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_truncate] >> Begin\n");
 
-     int xpn_truncate ( const char *path,  off_t length )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_truncate(path, length);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_truncate] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_truncate] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_truncate(path, length);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_truncate] >> End\n");
+int xpn_ftruncate(int fd, off_t length)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_ftruncate] >> Begin\n");
 
-     int xpn_ftruncate ( int fd,  off_t length )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_ftruncate(fd, length);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_ftruncate] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_ftruncate] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_ftruncate(fd, length);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_ftruncate] >> End\n");
+int xpn_stat(const char* path, struct stat* sb)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_stat] >> Begin\n");
 
-     int xpn_stat (const char *path, struct stat *sb )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_stat(path, sb);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_stat] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_stat] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_stat(path, sb);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_stat] >> End\n");
+int xpn_fstat(int fd, struct stat* sb)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_fstat] >> Begin\n");
 
-     int xpn_fstat ( int fd, struct stat *sb )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_fstat(fd, sb);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_fstat] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_fstat] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_fstat(fd, sb);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_fstat] >> End\n");
+int xpn_chown(const char* path, uid_t owner, gid_t group)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_chown] >> Begin\n");
 
-     int xpn_chown ( const char *path,  uid_t owner,  gid_t group )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_chown(path, owner, group);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_chown] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_chown] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_chown(path, owner, group);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_chown] >> End\n");
+int xpn_fchown(int fd, uid_t owner, gid_t group)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_fchown] >> Begin\n");
 
-     int xpn_fchown (int  fd,  uid_t owner,  gid_t group )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_fchown(fd, owner, group);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_fchown] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_fchown] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_fchown(fd, owner, group);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_fchown] >> End\n");
+int xpn_chmod(const char* path, mode_t mode)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_chmod] >> Begin\n");
 
-     int xpn_chmod ( const char *path,  mode_t mode )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_chmod(path, mode);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_chmod] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_chmod] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_chmod(path, mode);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_chmod] >> End\n");
+int xpn_fchmod(int fd, mode_t mode)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_fchmod] >> Begin\n");
 
-     int xpn_fchmod ( int fd,  mode_t mode )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_fchmod(fd, mode);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_fchmod] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_fchmod] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_fchmod(fd, mode);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_fchmod] >> End\n");
+int xpn_dup(int fd)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_dup] >> Begin\n");
 
-     int xpn_dup ( int fd )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_dup(fd);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_dup] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_dup] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_dup(fd);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_dup] >> End\n");
+int xpn_dup2(int fd, int fd2)
+{
+    int ret = -1;
 
-       return ret;
-     }
+    debug_info("[XPN_UNISTD] [xpn_dup2] >> Begin\n");
 
-     int xpn_dup2 ( int fd, int fd2 )
-     {
-       int ret = -1;
+    XPN_API_LOCK();
+    ret = xpn_simple_dup2(fd, fd2);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_UNISTD] [xpn_dup2] >> Begin\n");
+    debug_info("[XPN_UNISTD] [xpn_dup2] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_dup2(fd, fd2);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_UNISTD] [xpn_dup2] >> End\n");
-
-       return ret;
-     }
-
-
-  /* ................................................................... */
-
+/* ................................................................... */

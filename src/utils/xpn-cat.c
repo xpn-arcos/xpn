@@ -1,75 +1,69 @@
 
-  /*
-   *  Copyright 2000-2026 The Expand Team.
-   *
-   *  This file is part of Expand.
-   *
-   *  Expand is free software: you can redistribute it and/or modify
-   *  it under the terms of the GNU Lesser General Public License as published by
-   *  the Free Software Foundation, either version 3 of the License, or
-   *  (at your option) any later version.
-   *
-   *  Expand is distributed in the hope that it will be useful,
-   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   *  GNU Lesser General Public License for more details.
-   *
-   *  You should have received a copy of the GNU Lesser General Public License
-   *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
-   *
-   */
+/*
+ *  Copyright 2000-2026 The Expand Team.
+ *
+ *  This file is part of Expand.
+ *
+ *  Expand is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Expand is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
-
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
 #include <unistd.h>
+
 #include "all_system.h"
 #include "xpn.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
-
 #define BUFFER_SIZE_BUILD 1024 * 1024 + 1
-#define BUFFER_SIZE 1024 * 1024
-void print_limit(char *string, size_t num)
+#define BUFFER_SIZE       1024 * 1024
+void print_limit(char* string, size_t num)
 {
-  char c = string[num];
-  string[num] = 0;
-  printf("%s",string);
-  string[num] = c;
+    char c = string[num];
+    string[num] = 0;
+    printf("%s", string);
+    string[num] = c;
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-	int   file;
-	char  buffer[BUFFER_SIZE_BUILD];
-	int   read_size;
-	if (argc < 2)
-	{
-		fprintf(stderr, "Error: usage: ./cat filename\n");
-		return (-1);
-	}
-	xpn_init();
-	file = xpn_open(argv[1], O_RDONLY);
-	if (file == -1)
-	{
-		fprintf(stderr, "Error: %s: file not found\n", argv[1]);
-		return (-1);
-	}
-	while ((read_size = xpn_read(file, buffer, BUFFER_SIZE)) > 0)
-		// fprintf(stdout, "read_size:%d\n%s",read_size, buffer);
-		print_limit(buffer, read_size);
+    int file;
+    char buffer[BUFFER_SIZE_BUILD];
+    int read_size;
+    if (argc < 2) {
+        fprintf(stderr, "Error: usage: ./cat filename\n");
+        return (-1);
+    }
+    xpn_init();
+    file = xpn_open(argv[1], O_RDONLY);
+    if (file == -1) {
+        fprintf(stderr, "Error: %s: file not found\n", argv[1]);
+        return (-1);
+    }
+    while ((read_size = xpn_read(file, buffer, BUFFER_SIZE)) > 0)
+        // fprintf(stdout, "read_size:%d\n%s",read_size, buffer);
+        print_limit(buffer, read_size);
 
-	xpn_close(file);
-	xpn_destroy();
-  	return (0);
+    xpn_close(file);
+    xpn_destroy();
+    return (0);
 }
-
 
 // #define BAR_LENGTH 50
-
 
 // struct stat st;
 // ssize_t     sum;
@@ -209,4 +203,3 @@ int main(int argc, char **argv)
 
 // 	exit(0);
 // }
-

@@ -19,38 +19,35 @@
  *
  */
 
-
 #ifndef _MPI_SERVER_COMM_H_
 #define _MPI_SERVER_COMM_H_
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-  /* ... Include / Inclusion ........................................... */
+/* ... Include / Inclusion ........................................... */
 
-     #include "all_system.h"
-     #include "base/utils.h"
-     #include "base/time_misc.h"
+#include "all_system.h"
+#include "base/time_misc.h"
+#include "base/utils.h"
 
+/* ... Functions / Funciones ......................................... */
 
-  /* ... Functions / Funciones ......................................... */
+int mpi_server_comm_init(int argc, char* argv[], int thread_mode, char* port_name);
+int mpi_server_comm_destroy(char* port_name);
 
-  int      mpi_server_comm_init            ( int argc, char *argv[], int thread_mode, char * port_name );
-  int      mpi_server_comm_destroy         ( char * port_name );
+int mpi_server_comm_accept(char* port_name, MPI_Comm** new_sd);
+int mpi_server_comm_disconnect(MPI_Comm* fd);
 
-  int      mpi_server_comm_accept          ( char * port_name, MPI_Comm **new_sd );
-  int      mpi_server_comm_disconnect      ( MPI_Comm *fd );
+ssize_t mpi_server_comm_read_operation(MPI_Comm* fd, int* op, int* rank_client_id, int* tag_client_id);
+ssize_t mpi_server_comm_write_data(MPI_Comm* fd, char* data, ssize_t size, int rank_client_id, int tag_client_id);
+ssize_t mpi_server_comm_read_data(MPI_Comm* fd, char* data, ssize_t size, int rank_client_id, int tag_client_id);
 
-  ssize_t  mpi_server_comm_read_operation  ( MPI_Comm *fd, int *op, int *rank_client_id, int *tag_client_id );
-  ssize_t  mpi_server_comm_write_data      ( MPI_Comm *fd, char *data, ssize_t size, int  rank_client_id, int tag_client_id );
-  ssize_t  mpi_server_comm_read_data       ( MPI_Comm *fd, char *data, ssize_t size, int  rank_client_id, int tag_client_id );
+/* ................................................................... */
 
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
+#ifdef __cplusplus
+}
+#endif
 
 #endif

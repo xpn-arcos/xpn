@@ -19,83 +19,77 @@
  *
  */
 
-
 /* ... Include / Inclusion ........................................... */
 
-   #include "mq_server_utils.h"
+#include "mq_server_utils.h"
 
 /* ... Globals / Globales ............................................ */
 
-   CircularQueueMQ queue_mq;
-
+CircularQueueMQ queue_mq;
 
 /* ... Functions / Funciones ......................................... */
 
 // get time...
-double get_time_ops ( void )
+double get_time_ops(void)
 {
-    struct timeval  tp;
-    //struct timezone tzp;
-
-    gettimeofday( & tp, NULL);
-    return ((double) tp.tv_sec + .000001 * (double) tp.tv_usec);
-}
-
-double get_time ( void )
-{
-    struct timeval  tp;
-    //struct timezone tzp;
+    struct timeval tp;
+    // struct timezone tzp;
 
     gettimeofday(&tp, NULL);
-    return((double) tp.tv_sec + .000001 * (double) tp.tv_usec);
+    return ((double)tp.tv_sec + .000001 * (double)tp.tv_usec);
+}
+
+double get_time(void)
+{
+    struct timeval tp;
+    // struct timezone tzp;
+
+    gettimeofday(&tp, NULL);
+    return ((double)tp.tv_sec + .000001 * (double)tp.tv_usec);
 }
 
 // CircularQueue
-void queue_mq_init ( void )
+void queue_mq_init(void)
 {
-    queue_mq.front =  0;
-    queue_mq.rear  = -1;
-    queue_mq.count =  0;
+    queue_mq.front = 0;
+    queue_mq.rear = -1;
+    queue_mq.count = 0;
 
-    pthread_mutex_init( & queue_mq.mutex, NULL);
-    pthread_cond_init ( & queue_mq.not_empty, NULL);
-    pthread_cond_init ( & queue_mq.not_full, NULL);
+    pthread_mutex_init(&queue_mq.mutex, NULL);
+    pthread_cond_init(&queue_mq.not_empty, NULL);
+    pthread_cond_init(&queue_mq.not_full, NULL);
 }
 
-void enqueue_mq ( ThreadData * client )
+void enqueue_mq(ThreadData* client)
 {
-    pthread_mutex_lock( &queue_mq.mutex );
-    while (queue_mq.count >= QUEUE_MQ_SIZE)
-    {
-        pthread_cond_wait( & queue_mq.not_full, & queue_mq.mutex);
+    pthread_mutex_lock(&queue_mq.mutex);
+    while (queue_mq.count >= QUEUE_MQ_SIZE) {
+        pthread_cond_wait(&queue_mq.not_full, &queue_mq.mutex);
     }
 
     queue_mq.rear = (queue_mq.rear + 1) % QUEUE_MQ_SIZE;
     queue_mq.queue[queue_mq.rear] = client;
     queue_mq.count++;
 
-    pthread_cond_signal( & queue_mq.not_empty);
-    pthread_mutex_unlock( & queue_mq.mutex);
+    pthread_cond_signal(&queue_mq.not_empty);
+    pthread_mutex_unlock(&queue_mq.mutex);
 }
 
-ThreadData * dequeue_mq ( void )
+ThreadData* dequeue_mq(void)
 {
-    pthread_mutex_lock( &queue_mq.mutex );
-    while (queue_mq.count <= 0)
-    {
-        pthread_cond_wait( & queue_mq.not_empty, & queue_mq.mutex );
+    pthread_mutex_lock(&queue_mq.mutex);
+    while (queue_mq.count <= 0) {
+        pthread_cond_wait(&queue_mq.not_empty, &queue_mq.mutex);
     }
 
-    ThreadData * client = queue_mq.queue[queue_mq.front];
+    ThreadData* client = queue_mq.queue[queue_mq.front];
     queue_mq.front = (queue_mq.front + 1) % QUEUE_MQ_SIZE;
     queue_mq.count--;
 
-    pthread_cond_signal( & queue_mq.not_full);
-    pthread_mutex_unlock( & queue_mq.mutex);
+    pthread_cond_signal(&queue_mq.not_full);
+    pthread_mutex_unlock(&queue_mq.mutex);
 
     return client;
 }
 
-
 /* ................................................................... */
-

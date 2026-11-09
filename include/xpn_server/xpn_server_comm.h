@@ -19,57 +19,55 @@
  *
  */
 
-
 #ifndef _XPN_SERVER_COMM_H_
 #define _XPN_SERVER_COMM_H_
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-  /* ... Include / Inclusion ........................................... */
+/* ... Include / Inclusion ........................................... */
 
-     #include "all_system.h"
-     #include "base/utils.h"
-     #include "base/time_misc.h"
-     #include "base/ns.h"
-     #include "socket.h"
-     #include "xpn_server_params.h"
-     #include "sck_server_comm.h"
-     #include "mq_server_comm.h"
-     #include "mq_server_ops.h"
+#include "all_system.h"
+#include "base/ns.h"
+#include "base/time_misc.h"
+#include "base/utils.h"
+#include "mq_server_comm.h"
+#include "mq_server_ops.h"
+#include "sck_server_comm.h"
+#include "socket.h"
+#include "xpn_server_params.h"
 #ifdef ENABLE_MPI_SERVER
-     #include "mpi_server_comm.h"
+#include "mpi_server_comm.h"
 #endif
 #ifdef ENABLE_MPI_SERVER
-     #include "sck_server_comm.h"
-#endif   
+#include "sck_server_comm.h"
+#endif
 
+/* ... Const / Const ................................................. */
 
-  /* ... Const / Const ................................................. */
+// connection type
+#define XPN_SERVER_CONNECTION     0
+#define XPN_SERVER_CONNECTIONLESS 1
 
-     // connection type
-     #define XPN_SERVER_CONNECTION      0
-     #define XPN_SERVER_CONNECTIONLESS  1
+/* ... Functions / Funciones ......................................... */
 
+int xpn_server_comm_init(int server_type, xpn_server_param_st* params);
+int xpn_server_comm_destroy(int server_type, xpn_server_param_st* params);
 
-  /* ... Functions / Funciones ......................................... */
+int xpn_server_comm_accept(int server_type, xpn_server_param_st* params, int connection_type, void** new_sd);
+int xpn_server_comm_disconnect(int server_type, void* sd);
 
-     int       xpn_server_comm_init              ( int server_type, xpn_server_param_st *params );
-     int       xpn_server_comm_destroy           ( int server_type, xpn_server_param_st *params );
+ssize_t xpn_server_comm_read_operation(int server_type, void* sd, int* op, int* rank_client_id, int* tag_client_id);
+ssize_t xpn_server_comm_write_data(int server_type, void* sd, char* data, ssize_t size, int rank_client_id,
+                                   int tag_client_id);
+ssize_t xpn_server_comm_read_data(int server_type, void* sd, char* data, ssize_t size, int rank_client_id,
+                                  int tag_client_id);
 
-     int       xpn_server_comm_accept            ( int server_type, xpn_server_param_st * params, int connection_type, void ** new_sd );
-     int       xpn_server_comm_disconnect        ( int server_type, void  *sd );
+/* ................................................................... */
 
-     ssize_t   xpn_server_comm_read_operation    ( int server_type, void *sd, int  *op,                 int *rank_client_id, int *tag_client_id );
-     ssize_t   xpn_server_comm_write_data        ( int server_type, void *sd, char *data, ssize_t size, int  rank_client_id, int  tag_client_id );
-     ssize_t   xpn_server_comm_read_data         ( int server_type, void *sd, char *data, ssize_t size, int  rank_client_id, int  tag_client_id );
-
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
+#ifdef __cplusplus
+}
+#endif
 
 #endif

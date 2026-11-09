@@ -21,19 +21,19 @@
 
 #include <stdlib.h>
 #include <string.h>
+
 #include "xpn.h"
 
-void print_tree(const char *path, int depth) {
-    DIR *dir;
-    struct dirent *entry;
+void print_tree(const char* path, int depth)
+{
+    DIR* dir;
+    struct dirent* entry;
 
-    if (!(dir = xpn_opendir(path)))
-        return;
+    if (!(dir = xpn_opendir(path))) return;
 
     while ((entry = xpn_readdir(dir)) != NULL) {
         // Ignore "." and ".."
-        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
-            continue;
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) continue;
 
         // Print spaces according to the depth
         for (int i = 0; i < depth; i++) {
@@ -42,7 +42,6 @@ void print_tree(const char *path, int depth) {
 
         // Print the file/directory name
         printf(" |-- %s\n", entry->d_name);
-
 
         // Construct the new path
         char new_path[1024];
@@ -57,14 +56,14 @@ void print_tree(const char *path, int depth) {
     xpn_closedir(dir);
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     int ret;
-    if (argc < 2){
+    if (argc < 2) {
         printf("Usage: %s <path>\n", argv[0]);
         exit(EXIT_FAILURE);
     }
-    
+
     ret = xpn_init();
     if (ret < 0) {
         printf("Error %d while initializing expand\n", ret);

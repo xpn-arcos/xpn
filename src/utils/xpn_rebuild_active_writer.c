@@ -19,56 +19,53 @@
  *
  */
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
-
-     #include <dirent.h>
-     #include <fcntl.h>
-     #include <linux/limits.h>
-     #include <stdio.h>
-     #include <stdlib.h>
-     #include <string.h>
-     #include <sys/stat.h>
-     #include <sys/types.h>
-     #include <unistd.h>
-
-     #if defined(HAVE_MPI_H)
-     #include "mpi.h"
-     #endif
-
-     #include "ns.h"
-     #include "xpn/xpn_simple/xpn_policy_rw.h"
-
-
-  /* ... Const / Const ................................................. */
-
-     #ifndef _LARGEFILE_SOURCE
-     #define _LARGEFILE_SOURCE
-     #endif
-
-     #ifndef _FILE_OFFSET_BITS
-     #define _FILE_OFFSET_BITS 64
-     #endif
-
-     #define HEADER_SIZE   8192
-     #define TAG_OFFSET    10
-     #define TAG_READ_SIZE 20
-     #define TAG_BUF       30
-
-
-  /* ... Global variables / Variables globales ......................... */
-
-     int *rank_actual_to_new = NULL;
-     int *rank_actual_to_old = NULL;
-     int *rank_new_to_actual = NULL;
-     int *rank_old_to_actual = NULL;
-     int old_size, new_size;
-
-
-  /* ... Functions / Funciones ......................................... */
+#include <dirent.h>
+#include <fcntl.h>
+#include <linux/limits.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #if defined(HAVE_MPI_H)
-int copy(char *entry, int is_file, int blocksize, int replication_level, int rank, int size) {
+#include "mpi.h"
+#endif
+
+#include "ns.h"
+#include "xpn/xpn_simple/xpn_policy_rw.h"
+
+/* ... Const / Const ................................................. */
+
+#ifndef _LARGEFILE_SOURCE
+#define _LARGEFILE_SOURCE
+#endif
+
+#ifndef _FILE_OFFSET_BITS
+#define _FILE_OFFSET_BITS 64
+#endif
+
+#define HEADER_SIZE   8192
+#define TAG_OFFSET    10
+#define TAG_READ_SIZE 20
+#define TAG_BUF       30
+
+/* ... Global variables / Variables globales ......................... */
+
+int* rank_actual_to_new = NULL;
+int* rank_actual_to_old = NULL;
+int* rank_new_to_actual = NULL;
+int* rank_old_to_actual = NULL;
+int old_size, new_size;
+
+/* ... Functions / Funciones ......................................... */
+
+#if defined(HAVE_MPI_H)
+int copy(char* entry, int is_file, int blocksize, int replication_level, int rank, int size)
+{
     struct stat st;
     int res;
     off64_t ret_2;
@@ -78,9 +75,9 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
     ssize_t read_size, write_size;
     off_t offset_src, offset_dest, offset_real;
     int replication, rank_to_send;
-    char *buf = NULL;
+    char* buf = NULL;
     int buf_len;
-    ssize_t *read_sizes = NULL;
+    ssize_t* read_sizes = NULL;
     MPI_Comm new_comm;
 
     MPI_Barrier(MPI_COMM_WORLD);
@@ -107,7 +104,8 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
     }
     if (rank_actual_to_new[rank] != -1) {
         MPI_Comm_split(MPI_COMM_WORLD, 0, rank, &new_comm);
-    } else {
+    }
+    else {
         MPI_Comm_split(MPI_COMM_WORLD, MPI_UNDEFINED, rank, &new_comm);
     }
     // Broadcast stat
@@ -126,7 +124,8 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
                 MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
             }
         }
-    } else {
+    }
+    else {
         // Only create tmp file in new_ranks
         if (rank_actual_to_new[rank] != -1) {
             sprintf(dest_path, "%s_XXXXXX", entry);
@@ -153,12 +152,12 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
         }
         // Alocate buffers
         buf_len = blocksize;
-        buf = (char *)malloc(blocksize * sizeof(char));
+        buf = (char*)malloc(blocksize * sizeof(char));
         if (NULL == buf) {
             perror("malloc buf");
             MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
         }
-        read_sizes = (ssize_t *)malloc(size * sizeof(ssize_t));
+        read_sizes = (ssize_t*)malloc(size * sizeof(ssize_t));
         if (NULL == read_sizes) {
             perror("malloc read_sizes");
             MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
@@ -205,8 +204,8 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
             // Write in new_ranks
             if (rank_actual_to_new[rank] != -1) {
                 // Calculate the block
-                XpnCalculateBlockInvert(blocksize, replication_level, new_size, rank_actual_to_new[rank], offset_dest, 0,
-                                        &offset_real, &replication);
+                XpnCalculateBlockInvert(blocksize, replication_level, new_size, rank_actual_to_new[rank], offset_dest,
+                                        0, &offset_real, &replication);
                 XpnCalculateBlock(blocksize, replication_level, old_size, offset_real, replication, 0, &offset_src,
                                   &rank_to_send);
 
@@ -268,11 +267,12 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
     return 0;
 }
 
-int list(char *dir_name, int blocksize, int replication_level, int rank, int size) {
+int list(char* dir_name, int blocksize, int replication_level, int rank, int size)
+{
     int res;
-    DIR *dir = NULL;
+    DIR* dir = NULL;
     struct stat stat_buf;
-    struct dirent *entry;
+    struct dirent* entry;
     char path[PATH_MAX];
     int while_loop = 1;
     // Calculate the master rank of the old file
@@ -349,7 +349,8 @@ int list(char *dir_name, int blocksize, int replication_level, int rank, int siz
             MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
         }
         closedir(dir);
-    } else {
+    }
+    else {
         while_loop = 1;
         while (1) {
             // Get the broadcast values to run copy()
@@ -388,7 +389,8 @@ int list(char *dir_name, int blocksize, int replication_level, int rank, int siz
     return 0;
 }
 
-void calculate_ranks_sizes(char *path_old_hosts, char *path_new_hosts, int *old_rank, int *new_rank) {
+void calculate_ranks_sizes(char* path_old_hosts, char* path_new_hosts, int* old_rank, int* new_rank)
+{
     // Get ip and hostname
     char hostip[HOST_NAME_MAX];
     ns_get_host_ip(hostip, HOST_NAME_MAX);
@@ -397,8 +399,8 @@ void calculate_ranks_sizes(char *path_old_hosts, char *path_new_hosts, int *old_
     int world_rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
     // Open host files
-    FILE *file_old = NULL;
-    FILE *file_new = NULL;
+    FILE* file_old = NULL;
+    FILE* file_new = NULL;
     file_old = fopen(path_old_hosts, "r");
     if (file_old == NULL) {
         perror("Error opening old_hosts");
@@ -440,10 +442,9 @@ cleanup_calculate_ranks_sizes:
 }
 #endif
 
-
 #if defined(HAVE_MPI_H)
 // TODO: think if MPI_Abort is the desired error handler
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     int rank, size, old_rank, new_rank;
     int replication_level = 0;
@@ -454,11 +455,12 @@ int main(int argc, char *argv[])
     //
     // Check arguments...
     //
-    if (argc < 4)
-    {
+    if (argc < 4) {
         printf("Usage:\n");
-        printf(" ./%s <xpn local path> <path to old hostfile> <path to new hostfile> <optional destination block size> "
-               "<optional replication level>\n", argv[0]);
+        printf(
+            " ./%s <xpn local path> <path to old hostfile> <path to new hostfile> <optional destination block size> "
+            "<optional replication level>\n",
+            argv[0]);
         printf("\n");
         return -1;
     }
@@ -563,13 +565,11 @@ int main(int argc, char *argv[])
     return res;
 }
 #else
-  int main ( int argc, char *argv[] )
-  {
-      printf("ERROR: this utility must to be compiled with MPI support\n") ;
-      return -1 ;
-  }
+int main(int argc, char* argv[])
+{
+    printf("ERROR: this utility must to be compiled with MPI support\n");
+    return -1;
+}
 #endif
 
-
 /* ................................................................... */
-

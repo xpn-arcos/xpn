@@ -19,207 +19,203 @@
  *
  */
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include "xpn.h"
+#include "xpn_api_mutex.h"
+#include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
 
-     #include "xpn.h"
-     #include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
-     #include "xpn_api_mutex.h"
+/* ... Functions / Funciones ......................................... */
 
+FILE* xpn_fopen(const char* name, const char* mode)
+{
+    FILE* ret = NULL;
 
-  /* ... Functions / Funciones ......................................... */
+    debug_info("[XPN_STDIO] [xpn_fopen] >> Begin\n");
 
-     FILE * xpn_fopen ( const char *name, const char *mode )
-     {
-        FILE *ret = NULL;
+    XPN_API_LOCK();
+    ret = xpn_simple_fopen(name, mode);
+    XPN_API_UNLOCK();
 
-        debug_info("[XPN_STDIO] [xpn_fopen] >> Begin\n");
+    debug_info("[XPN_STDIO] [xpn_fopen] >> End\n");
 
-        XPN_API_LOCK();
-        ret = xpn_simple_fopen(name, mode);
-        XPN_API_UNLOCK();
+    return ret;
+}
 
-        debug_info("[XPN_STDIO] [xpn_fopen] >> End\n");
+int xpn_fclose(FILE* fp)
+{
+    int ret;
 
-        return ret;
-     }
+    debug_info("[XPN_STDIO] [xpn_fclose] >> Begin\n");
 
-     int xpn_fclose ( FILE *fp )
-     {
-        int ret;
+    XPN_API_LOCK();
+    ret = xpn_simple_fclose(fp);
+    XPN_API_UNLOCK();
 
-        debug_info("[XPN_STDIO] [xpn_fclose] >> Begin\n");
+    debug_info("[XPN_STDIO] [xpn_fclose] >> End\n");
 
-        XPN_API_LOCK();
-        ret = xpn_simple_fclose(fp);
-        XPN_API_UNLOCK();
+    return ret;
+}
 
-        debug_info("[XPN_STDIO] [xpn_fclose] >> End\n");
+size_t xpn_fread(void* ptr, size_t size, size_t nmemb, register FILE* stream)
+{
+    size_t ret;
 
-        return ret;
-     }
+    debug_info("[XPN_STDIO] [xpn_fread] >> Begin\n");
 
-     size_t xpn_fread ( void *ptr, size_t size, size_t nmemb, register FILE *stream )
-     {
-       size_t ret;
+    XPN_API_LOCK();
+    ret = xpn_simple_fread(ptr, size, nmemb, stream);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_STDIO] [xpn_fread] >> Begin\n");
+    debug_info("[XPN_STDIO] [xpn_fread] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_fread(ptr, size, nmemb, stream);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_STDIO] [xpn_fread] >> End\n");
+size_t xpn_fwrite(const void* ptr, size_t size, size_t nmemb, register FILE* stream)
+{
+    size_t ret;
 
-       return ret;
-     }
+    debug_info("[XPN_STDIO] [xpn_fwrite] >> Begin\n");
 
-     size_t xpn_fwrite ( const void *ptr, size_t size, size_t nmemb, register FILE *stream )
-     {
-       size_t ret;
+    XPN_API_LOCK();
+    ret = xpn_simple_fwrite(ptr, size, nmemb, stream);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_STDIO] [xpn_fwrite] >> Begin\n");
+    debug_info("[XPN_STDIO] [xpn_fwrite] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_fwrite(ptr, size, nmemb, stream);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_STDIO] [xpn_fwrite] >> End\n");
+int xpn_fflush(FILE* stream)
+{
+    int ret;
 
-       return ret;
-     }
+    debug_info("[XPN_STDIO] [xpn_fflush] >> Begin\n");
 
-     int xpn_fflush ( FILE *stream )
-     {
-       int ret;
+    XPN_API_LOCK();
+    ret = xpn_simple_fflush(stream);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_STDIO] [xpn_fflush] >> Begin\n");
+    debug_info("[XPN_STDIO] [xpn_fflush] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_fflush(stream);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_STDIO] [xpn_fflush] >> End\n");
+int xpn_fseek(FILE* stream, long int offset, int whence)
+{
+    int ret;
 
-       return ret;
-     }
+    debug_info("[XPN_STDIO] [xpn_fseek] >> Begin\n");
 
-     int xpn_fseek ( FILE *stream, long int offset, int whence )
-     {
-       int ret;
+    XPN_API_LOCK();
+    ret = xpn_simple_fseek(stream, offset, whence);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_STDIO] [xpn_fseek] >> Begin\n");
+    debug_info("[XPN_STDIO] [xpn_fseek] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_fseek(stream, offset, whence);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_STDIO] [xpn_fseek] >> End\n");
+long xpn_ftell(FILE* stream)
+{
+    long ret;
 
-       return ret;
-     }
+    debug_info("[XPN_STDIO] [xpn_ftell] >> Begin\n");
 
-     long xpn_ftell ( FILE *stream )
-     {
-       long ret;
+    XPN_API_LOCK();
+    ret = xpn_simple_ftell(stream);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_STDIO] [xpn_ftell] >> Begin\n");
+    debug_info("[XPN_STDIO] [xpn_ftell] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_ftell(stream);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_STDIO] [xpn_ftell] >> End\n");
+void xpn_rewind(FILE* stream)
+{
+    debug_info("[XPN_STDIO] [xpn_rewind] >> Begin\n");
 
-       return ret;
-     }
+    XPN_API_LOCK();
+    xpn_simple_rewind(stream);
+    XPN_API_UNLOCK();
 
-     void xpn_rewind ( FILE *stream )
-     {
-       debug_info("[XPN_STDIO] [xpn_rewind] >> Begin\n");
+    debug_info("[XPN_STDIO] [xpn_rewind] >> End\n");
+}
 
-       XPN_API_LOCK();
-       xpn_simple_rewind(stream);
-       XPN_API_UNLOCK();
+int xpn_fgetc(FILE* stream)
+{
+    int ret;
 
-       debug_info("[XPN_STDIO] [xpn_rewind] >> End\n");
-     }
+    debug_info("[XPN_STDIO] [xpn_fgetc] >> Begin\n");
 
-     int xpn_fgetc ( FILE *stream )
-     {
-       int ret;
+    XPN_API_LOCK();
+    ret = xpn_simple_fgetc(stream);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_STDIO] [xpn_fgetc] >> Begin\n");
+    debug_info("[XPN_STDIO] [xpn_fgetc] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_fgetc(stream);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_STDIO] [xpn_fgetc] >> End\n");
+char* xpn_fgets(char* s, int tam, FILE* stream)
+{
+    char* ret;
 
-       return ret;
-     }
+    debug_info("[XPN_STDIO] [xpn_fgets] >> Begin\n");
 
-     char * xpn_fgets ( char *s, int tam, FILE *stream )
-     {
-       char * ret;
+    XPN_API_LOCK();
+    ret = xpn_simple_fgets(s, tam, stream);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_STDIO] [xpn_fgets] >> Begin\n");
+    debug_info("[XPN_STDIO] [xpn_fgets] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_fgets(s, tam, stream);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_STDIO] [xpn_fgets] >> End\n");
+int xpn_getc(FILE* stream)
+{
+    int ret;
 
-       return ret;
-     }
+    debug_info("[XPN_STDIO] [xpn_getc] >> Begin\n");
 
-     int xpn_getc ( FILE *stream )
-     {
-       int ret;
+    XPN_API_LOCK();
+    ret = xpn_simple_getc(stream);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_STDIO] [xpn_getc] >> Begin\n");
+    debug_info("[XPN_STDIO] [xpn_getc] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_getc(stream);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_STDIO] [xpn_getc] >> End\n");
+int xpn_fileno(FILE* stream)
+{
+    int ret;
 
-       return ret;
-     }
+    debug_info("[XPN_STDIO] [xpn_fileno] >> Begin\n");
 
-     int xpn_fileno ( FILE *stream )
-     {
-       int ret;
+    XPN_API_LOCK();
+    ret = xpn_simple_fileno(stream);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_STDIO] [xpn_fileno] >> Begin\n");
+    debug_info("[XPN_STDIO] [xpn_fileno] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_fileno(stream);
-       XPN_API_UNLOCK();
+    return ret;
+}
 
-       debug_info("[XPN_STDIO] [xpn_fileno] >> End\n");
+int xpn_ferror(FILE* stream)
+{
+    int ret;
 
-       return ret;
-     }
+    debug_info("[XPN_STDIO] [xpn_ferror] >> Begin\n");
 
-     int xpn_ferror ( FILE *stream )
-     {
-       int ret;
+    XPN_API_LOCK();
+    ret = xpn_simple_ferror(stream);
+    XPN_API_UNLOCK();
 
-       debug_info("[XPN_STDIO] [xpn_ferror] >> Begin\n");
+    debug_info("[XPN_STDIO] [xpn_ferror] >> End\n");
 
-       XPN_API_LOCK();
-       ret = xpn_simple_ferror(stream);
-       XPN_API_UNLOCK();
-
-       debug_info("[XPN_STDIO] [xpn_ferror] >> End\n");
-
-       return ret;
-     }
-
+    return ret;
+}
 
 /* ................................................................... */
-
